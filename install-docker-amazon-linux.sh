@@ -1,0 +1,53 @@
+#!/bin/bash
+# ===============================================
+# Docker Installation Script for Amazon Linux
+# Works with: Amazon Linux 2 / Amazon Linux 2023
+# ===============================================
+
+set -e
+
+echo "-----------------------------------------"
+echo "🚀 Starting Docker installation on Amazon Linux..."
+echo "-----------------------------------------"
+
+# Step 1: Update system packages
+echo "[1/6] Updating system packages..."
+sudo yum update -y
+
+# Step 2: Install required packages
+echo "[2/6] Installing required packages..."
+sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+
+# Step 3: Add Docker repository (for Amazon Linux 2)
+if [ -f /etc/os-release ]; then
+    . /etc/os-release
+    if [[ "$VERSION_ID" == "2" ]]; then
+        echo "[3/6] Adding Docker CE repository for Amazon Linux 2..."
+        sudo amazon-linux-extras enable docker
+        sudo yum install -y docker
+    else
+        echo "[3/6] Installing Docker from the default repo for Amazon Linux 2023..."
+        sudo dnf install -y docker
+    fi
+else
+    echo "Unable to detect OS version. Please verify manually."
+    exit 1
+fi
+
+# Step 4: Enable and start Docker
+echo "[4/6] Enabling and starting Docker service..."
+sudo systemctl enable docker
+sudo systemctl start docker
+
+# Step 5: Add current user to docker group
+echo "[5/6] Adding current user (${USER}) to docker group..."
+sudo usermod -aG docker $USER
+
+# Step 6: Verify Docker installation
+echo "[6/6] Verifying Docker installation..."
+docker --version && echo "✅ Docker installed successfully!" || echo "❌ Docker installation failed."
+
+echo "-----------------------------------------"
+echo "🎯 Installation complete!"
+echo "You may need to log out and log back in to use Docker without sudo."
+echo "-----------------------------------------"
