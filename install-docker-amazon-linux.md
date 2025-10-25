@@ -80,6 +80,8 @@ After installation, log out and log back in so the Docker group membership takes
 
 ✅ Verify Installation
 
+1. Open New Terminal and perform below steps.
+
 To confirm Docker is installed and running correctly:
 
 docker run hello-world
@@ -89,3 +91,10 @@ Expected output:
 
 Hello from Docker!
 This message shows that your installation appears to be working correctly.
+
+Note : If your run  "docker run hello-world" on installed docker terminal,below error comes.
+
+[ec2-user@ip-172-31-83-67 ~]$ docker run hello-world
+docker: permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Head "http://%2Fvar%2Frun%2Fdocker.sock/_ping": dial unix /var/run/docker.sock: connect: permission denied.
+See 'docker run --help'.
+[ec2-user@ip-172-31-83-67 ~]$
